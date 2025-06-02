@@ -43,8 +43,7 @@ def train(args):
                                      beta_start=diffusion_config['beta_start'],
                                      beta_end=diffusion_config['beta_end'])
     
-    # Before training
-    print("Sample input shape:", im.shape)
+    
 
     # Instantiate the model
     model = Unet(model_config).to(device)
@@ -68,6 +67,8 @@ def train(args):
     for epoch_idx in range(num_epochs):
         losses = []
         for im in tqdm(train_loader):
+            # Before training
+            print("Sample input shape:", im.shape)
             optimizer.zero_grad()
             im = im.float().to(device)
             
