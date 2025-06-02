@@ -5,12 +5,22 @@ import os
 import numpy as np
 from tqdm import tqdm
 from torch.optim import Adam
-from dataset.mnist_dataset import MnistDataset
+
 from torch.utils.data import DataLoader
 from models.unet_base import Unet
 from scheduler.linear_noise_scheduler import LinearNoiseScheduler
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+from torchvision import datasets, transforms
+
+
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Resize((32, 32)),
+])
+
+dataset = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+train_loader = DataLoader(dataset, batch_size=64, shuffle=True)
 
 
 def train(args):
@@ -33,10 +43,9 @@ def train(args):
                                      beta_start=diffusion_config['beta_start'],
                                      beta_end=diffusion_config['beta_end'])
     
-    # Create the dataset
-    mnist = MnistDataset('train', im_path=dataset_config['im_path'])
-    mnist_loader = DataLoader(mnist, batch_size=train_config['batch_size'], shuffle=True, num_workers=4)
-    
+    # Before training
+    print("Sample input shape:", im.shape)
+
     # Instantiate the model
     model = Unet(model_config).to(device)
     model.train()
@@ -58,7 +67,7 @@ def train(args):
     # Run training
     for epoch_idx in range(num_epochs):
         losses = []
-        for im in tqdm(mnist_loader):
+        for im in tqdm(train_loader):
             optimizer.zero_grad()
             im = im.float().to(device)
             
