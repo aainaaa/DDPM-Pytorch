@@ -30,11 +30,10 @@ def train(args):
             config = yaml.safe_load(file)
         except yaml.YAMLError as exc:
             print(exc)
-    print(config)
+    #print(config)
     ########################
     
     diffusion_config = config['diffusion_params']
-    dataset_config = config['dataset_params']
     model_config = config['model_params']
     train_config = config['train_params']
     
@@ -66,7 +65,7 @@ def train(args):
     # Run training
     for epoch_idx in range(num_epochs):
         losses = []
-        for im in tqdm(train_loader):
+        for im, _ in train_loader:
             optimizer.zero_grad()
             im = im.float().to(device)
             
