@@ -67,8 +67,6 @@ def train(args):
     for epoch_idx in range(num_epochs):
         losses = []
         for im in tqdm(train_loader):
-            # Before training
-            print("Sample input shape:", im.shape)
             optimizer.zero_grad()
             im = im.float().to(device)
             
