@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-<your updated code here>
-=======
 import torch
 import yaml
 import argparse
