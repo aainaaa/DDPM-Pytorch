@@ -17,4 +17,4 @@ __pycache__
 *.pth
 
 # Ignore pickle files
-*.pkl
+*.pkldata/
